@@ -1,17 +1,6 @@
 # cardano-handshake
 Shared space for information about Handshake on Cardano
 
-## Roadmap
-- [x] Create a set of dummy `DNSReferenceDatum` records at a validator address
-    - [x] Implement essential validator
-    - [x] For initial example, use simple minting policy as placeholder
-    - [x] Write basic scripts for minting token pairs
-    - [x] Use to create datum
-- [ ] Add basic documentation for consuming `DNSReferenceDatum` at reference contract address
-- [ ] With team, answer questions below (sync / async?)
-- [ ] Fully implement reference validator
-- [ ] Fully implement minting validator
-
 ---
 
 ## How it works
@@ -123,3 +112,16 @@ See [Example response](example-query-response.json)
 
 ### General design
 - Is recursive design part of MVP?
+
+---
+
+## Roadmap
+- [x] Create a set of dummy `DNSReferenceDatum` records at a validator address
+    - [x] Implement essential validator
+    - [x] For initial example, use simple minting policy as placeholder
+    - [x] Write basic scripts for minting token pairs
+    - [x] Use to create datum
+- [x] Add basic documentation for consuming `DNSReferenceDatum` at reference contract address
+- [ ] With team, answer questions below (sync / async?)
+- [ ] Fully implement reference validator
+- [ ] Fully implement minting validator
