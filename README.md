@@ -10,7 +10,9 @@ Shared space for information about Handshake on Cardano
 - Datum with Reference Token at Ref. Contract Address contains `DNSReferenceDatum`, which is our on-chain record.
 
 ### Questions
-- Naming doesn't feel good. Moving toward new CIP. How do we want to handle in this case? Owner should hold a token named `theirdomain.cardano` - in which case, what do we name the reference token? `REFtheirdomain.cardano`? 
+- Currently using simple naming convention with `222` prefix on Owner token and `100` prefix on Reference token. This naming doesn't feel right. A broader group is moving toward new CIP. 
+
+How do we want to handle this case? Owner should hold a token named `theirdomain.cardano` - in which case, what do we name the reference token? `REFtheirdomain.cardano`? 
 
 ---
 
@@ -44,14 +46,14 @@ We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 {
   "constructor": 0,
   "fields": [
-    { "bytes": "6d696c6b7368616b65" },
-    { "bytes": "6d696c6b7368616b652e63617264616e6f" },
+    { "bytes": "74657374" },
+    { "bytes": "746573742e63617264616e6f" },
     {
       "constructor": 0,
       "fields": [
-        { "bytes": "6e73312e6d696c6b7368616b652e63617264616e6f" },
-        { "bytes": "686f73742e6578616d706c652e646f6d61696e" },
-        { "int": 1680427566 },
+        { "bytes": "6e73312e746573742e63617264616e6f" },
+        { "bytes": "686f73742e74657374" },
+        { "int": 1680431730 },
         { "int": 3600 },
         { "int": 600 },
         { "int": 604800 },
@@ -60,14 +62,9 @@ We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
     },
     { 
       "list": [
-        { 
-          "constructor": 0, 
-          "fields": [
-            { "bytes": "6e73312e6d696c6b7368616b652e63617264616e6f" }, 
-            { "bytes": "6e73322e6d696c6b7368616b652e63617264616e6f" }
-          ] 
-        }
-      ]
+        { "bytes": "6e73312e746573742e63617264616e6f" }, 
+        { "bytes": "6e73322e746573742e63617264616e6f" }
+      ] 
     }
   ]
 }
@@ -95,14 +92,14 @@ See [Example response](example.json)
 3. Decide on token naming, defining a new standard (with Mesh) if necessary
 4. Then implement
 
-### 1. Updating DNS Datum at Reference Validator
+### 1. Validation Logic = Updating DNS Datum
 - Is the datum above sufficient?
-- Are SOA and DNS record immutable?
+- Should SOA and DNS records be immutable?
 - If not, who can change the SOA and DNS records?
 - MVP allows owner of domain to change SOA and DNS.
 - Who holds an admin token? Should admin token exist? With what powers?
 
-### 2. Decide on minting logic Minting Conditions
+### 2. Decide on minting logic ->  Minting Conditions
 - How is the domain name itself handled? -> At minting, `DNSReferenceDatum.origin` must match `TokenName`.
 - If Reference Datum matches token name, mint a token pair. 
 - Must mint token pair with matching names
@@ -132,6 +129,6 @@ See [Example response](example.json)
     - [x] Write basic scripts for minting token pairs
     - [x] Use to create datum
 - [x] Add basic documentation for consuming `DNSReferenceDatum` at reference contract address
-- [ ] With team, answer questions below (sync / async?)
+- [ ] With team, answer questions above (sync / async?)
 - [ ] Fully implement reference validator
 - [ ] Fully implement minting validator
