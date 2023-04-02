@@ -58,24 +58,34 @@ We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
         { "int": 86400 }
       ]
     },
-    { "list": [{ "constructor": 0, "fields": [{ "bytes": "6e73312e6d696c6b7368616b652e63617264616e6f" }, { "bytes": "6e73322e6d696c6b7368616b652e63617264616e6f" }] }] }
+    { 
+      "list": [
+        { 
+          "constructor": 0, 
+          "fields": [
+            { "bytes": "6e73312e6d696c6b7368616b652e63617264616e6f" }, 
+            { "bytes": "6e73322e6d696c6b7368616b652e63617264616e6f" }
+          ] 
+        }
+      ]
+    }
   ]
 }
 ```
 
 ## Example
-Query this example of a DNS Reference Validator Address: [addr_test1wpsen790sz5rw9f7pt5c6rtm3kf9rpj3n32jtenuj02qqhga2unhd](https://preprod.cardanoscan.io/address/706199f8af80a837153e0ae98d0d7b8d925186519c5525e67c93d4005d)
+Query this example of a DNS Reference Validator Address: [addr_test1wqgf0d7rdlamdy46hd5u5wq47ql9chvv8w3k70nyqcfgd2qwpvxpx](https://preprod.cardanoscan.io/address/701097b7c36ffbb692babb69ca3815f03e5c5d8c3ba36f3e64061286a8)
 
 For example with `https://preprod.gomaestro-api.org/addresses/utxos`:
 ```bash
 curl -X POST \
-  -H "api-key: <your_project_api_key>" \
+  -H "api-key: DrhTBZ40MGef8XYWbwIi6ej4CAw7tgwP" \
   https://preprod.gomaestro-api.org/addresses/utxos \
   -H "Content-Type: application/json" \
-  -d '["addr_test1wpsen790sz5rw9f7pt5c6rtm3kf9rpj3n32jtenuj02qqhga2unhd"]'  
+  -d '["addr_test1wqgf0d7rdlamdy46hd5u5wq47ql9chvv8w3k70nyqcfgd2qwpvxpx"]'  
 ```
 
-See [Example response](example-query-response.json)
+See [Example response](example.json)
 
 ---
 
