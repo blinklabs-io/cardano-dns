@@ -1,0 +1,18 @@
+{
+  [
+    { "string": "test" },
+    { "string": "test.cardano" },
+    {
+      [
+        { "string": "ns1.test.cardano" },
+        { "string": "host.test" },
+        { "int": 1680431730 },
+        { "int": 3600 },
+        { "int": 600 },
+        { "int": 604800 },
+        { "int": 86400 }
+      ]
+    },
+    { [{ "string": "ns1.test.cardano" }, { "string": "ns2.test.cardano" }] }
+  ]
+}

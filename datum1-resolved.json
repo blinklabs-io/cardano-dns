@@ -1,0 +1,23 @@
+{
+  "fields": [
+    { "string": "treehouse" },
+    { "string": "treehouse.cardano" },
+    {
+      [
+        { "string": "ns1.treehouse.cardano" },
+        { "string": "admin.example.host" },
+        { "int": 1680431848 },
+        { "int": 3600 },
+        { "int": 600 },
+        { "int": 604800 },
+        { "int": 86400 }
+      ]
+    },
+    {
+      [
+        { "string": "ns1.treehouse.cardano" },
+        { "string": "ns2.treehouse.cardano" }
+      ]
+    }
+  ]
+}
