@@ -1,0 +1,7 @@
+$ORIGIN cardano.
+$TTL 60
+@ IN SOA ns.cardano. hostmaster.cardano. (1683227483, 21600, 3600, 604800, 60)
+treehouse IN NS ns1.treehouse.cardano.
+treehouse IN NS ns2.treehouse.cardano.
+test IN NS ns1.test.cardano.
+test IN NS ns2.test.cardano.

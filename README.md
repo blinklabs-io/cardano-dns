@@ -76,13 +76,27 @@ Query this example of a DNS Reference Validator Address: [addr_test1wqgf0d7rdlam
 For example with `https://preprod.gomaestro-api.org/addresses/utxos`:
 ```bash
 curl -X POST \
-  -H "api-key: DrhTBZ40MGef8XYWbwIi6ej4CAw7tgwP" \
+  -H "api-key: ${MAESTRO_API_KEY}" \
   https://preprod.gomaestro-api.org/addresses/utxos \
   -H "Content-Type: application/json" \
   -d '["addr_test1wqgf0d7rdlamdy46hd5u5wq47ql9chvv8w3k70nyqcfgd2qwpvxpx"]'  
 ```
 
 See [Example response](example.json)
+
+### Creating a .cardano zone file
+
+Using the above example, we can now build a zone file. Using the
+[dns.py](dns.py) Python script, we can output a zone file suitable for serving
+a `.cardano` domain with the data from our example. This is a simple proof of
+concept of transaction parsing using a remote API.
+
+```bash
+export MAESTRO_API_KEY=${MAESTRO_API_KEY}
+python3 dns.py > cardano.zone
+```
+
+The current zone [file](cardano.zone) includes our datum from above.
 
 ---
 
