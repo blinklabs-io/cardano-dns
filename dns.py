@@ -23,7 +23,9 @@ def main():
 
     print("$ORIGIN cardano.")
     print("$TTL 60")
-    print("@ IN SOA ns.cardano. hostmaster.cardano. ("+str(now)+", 21600, 3600, 604800, 60)")
+    print("@ IN SOA ns1.cardano. hostmaster.cardano. "+str(now)+" 21600 3600 604800 60")
+    print("  IN NS ns1.cardano.")
+    print("ns1.cardano. IN A 172.17.0.1")
 
     for tx in txs:
         name = bytes.fromhex(tx['datum']['json']['fields'][0]['bytes']).decode()
@@ -35,6 +37,7 @@ def main():
             cardano[name] = dict({"origin": origin})
             for ns in ns_list:
                 print(name + " IN NS " + bytes.fromhex(ns['bytes']).decode() + ".")
+                print(bytes.fromhex(ns['bytes']).decode() + ". IN A 172.17.0.1")
 
 if __name__ == '__main__':
     main()

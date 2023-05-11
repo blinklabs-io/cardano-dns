@@ -1,0 +1,10 @@
+zone "cardano" {
+    type master;
+    file "/var/lib/bind/cardano.zone";
+};
+
+// This is just for demo
+zone "treehouse.cardano" {
+    type master;
+    file "/var/lib/bind/treehouse.zone";
+};

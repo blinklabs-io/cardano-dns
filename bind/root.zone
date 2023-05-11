@@ -1,0 +1,4 @@
+. 86400 IN SOA ns1.cardano. hostmaster.cardano. 1683227483 21600 3600 604800 60
+. 86400 IN NS ns1.cardano.
+cardano. 86400 IN NS ns1.cardano.
+ns1.cardano. 86400 IN A 172.17.0.1

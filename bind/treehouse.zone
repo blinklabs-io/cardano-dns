@@ -1,0 +1,8 @@
+$ORIGIN treehouse.cardano.
+$TTL 60
+@ IN SOA ns1.treehouse.cardano. hostmaster.treehouse.cardano. 1683773269 21600 3600 604800 60
+  IN NS ns1.treehouse.cardano.
+  IN NS ns2.treehouse.cardano.
+ns1 IN A 172.17.0.1
+ns2 IN A 172.17.0.1
+www IN CNAME www.google.com.
