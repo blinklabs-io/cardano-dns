@@ -1,4 +1,4 @@
 zone "." {
-    type master;
-    file "/var/lib/bind/root.zone";
+    type hint;
+    file "/usr/share/dns/root.hints";
 };

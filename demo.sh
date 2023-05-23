@@ -49,4 +49,21 @@ echo Looking up www.treehouse.cardano CNAME record
 dig @${__dns} www.treehouse.cardano CNAME
 sleep 1
 
+echo
+echo
+
+echo Looking up www.google.com A record
+dig @${__dns} www.google.com A
+dig @103.196.38.39 +short www.google.com A
+sleep 1
+
+echo
+echo
+
+echo Looking up namebase A record
+dig @${__dns} namebase A
+dig @103.196.38.39 +short namebase A
+sleep 1
+
+
 docker rm -f bind9-container 2>&1 >/dev/null
