@@ -10,68 +10,41 @@ Shared space for information about Handshake on Cardano
 - Datum with Reference Token at Ref. Contract Address contains `DNSReferenceDatum`, which is our on-chain record.
 
 ### Questions
-- Currently using simple naming convention with `222` prefix on Owner token and `100` prefix on Reference token. This naming doesn't feel right. A broader group is moving toward new CIP. 
+- Currently using simple naming convention with `222` prefix on Owner token and `100` prefix on Reference token. This naming doesn't feel right. A broader group is moving toward new CIP.
 
-How do we want to handle this case? Owner should hold a token named `theirdomain.cardano` - in which case, what do we name the reference token? `REFtheirdomain.cardano`? 
+How do we want to handle this case? Owner should hold a token named `theirdomain.cardano` - in which case, what do we name the reference token? `REFtheirdomain.cardano`?
 
 ---
 
 ## DNSReferenceDatum
-- Do we need both `name` and `origin`?
-- Is it sufficient for `ns` to be a simple list?
+
 ```haskell
 data DNSReferenceDatum = DNSReferenceDatum
-  { 
-    name    :: BuiltinByteString,
+  {
     origin  :: BuiltinByteString,
-    soa     :: SOARecord,
     ns      :: [BuiltinByteString]
   }
-
--- where:
-data SOARecord = SOARecord 
-  {
-    soaMname       :: BuiltinByteString,
-    soaRname       :: BuiltinByteString,
-    soaSerial      :: Integer,
-    soaRefresh     :: Integer,
-    soaRetry       :: Integer,
-    soaExpire      :: Integer,
-    soaTtl         :: Integer
-  }
-```
 
 We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 ```json
 {
   "constructor": 0,
   "fields": [
-    { "bytes": "74657374" },
-    { "bytes": "746573742e63617264616e6f" },
+    { "bytes": "73696d706c652e63617264616e6f" },
     {
-      "constructor": 0,
-      "fields": [
-        { "bytes": "6e73312e746573742e63617264616e6f" },
-        { "bytes": "686f73742e74657374" },
-        { "int": 1680431730 },
-        { "int": 3600 },
-        { "int": 600 },
-        { "int": 604800 },
-        { "int": 86400 }
-      ]
-    },
-    { 
       "list": [
-        { "bytes": "6e73312e746573742e63617264616e6f" }, 
-        { "bytes": "6e73322e746573742e63617264616e6f" }
-      ] 
+        { "bytes": "6e73312e73696d706c652e63617264616e6f" },
+        { "bytes": "6e73322e73696d706c652e63617264616e6f" }
+      ]
     }
   ]
 }
 ```
 
 ## Example
-Query this example of a DNS Reference Validator Address: [addr_test1wqgf0d7rdlamdy46hd5u5wq47ql9chvv8w3k70nyqcfgd2qwpvxpx](https://preprod.cardanoscan.io/address/701097b7c36ffbb692babb69ca3815f03e5c5d8c3ba36f3e64061286a8)
+Updated 2023-05-31 with new DNS Reference Validator Address `addr_test1wqhlsl9dsny9d2hdc9uyx4ktj0ty0s8kxev4y9futq4qt4s5anczn`
+
+Query this example of a DNS Reference Validator Address: [addr_test1wqhlsl9dsny9d2hdc9uyx4ktj0ty0s8kxev4y9futq4qt4s5anczn](https://preprod.cardanoscan.io/address/702ff87cad84c856aaedc1784356cb93d647c0f6365952153c582a05d6)
 
 For example with `https://preprod.gomaestro-api.org/addresses/utxos`:
 ```bash
@@ -79,7 +52,7 @@ curl -X POST \
   -H "api-key: ${MAESTRO_API_KEY}" \
   https://preprod.gomaestro-api.org/addresses/utxos \
   -H "Content-Type: application/json" \
-  -d '["addr_test1wqgf0d7rdlamdy46hd5u5wq47ql9chvv8w3k70nyqcfgd2qwpvxpx"]'  
+  -d '["addr_test1wqhlsl9dsny9d2hdc9uyx4ktj0ty0s8kxev4y9futq4qt4s5anczn"]'
 ```
 
 See [Example response](example.json)
@@ -100,49 +73,63 @@ The current zone [file](cardano.zone) includes our datum from above.
 
 ---
 
-## Current Actions
-1. Decide on validation logic and validator parameters
-2. Decide on minting logic
-3. Decide on token naming, defining a new standard (with Mesh) if necessary
-4. Then implement
+# Handshake Plutus
+Repo: https://gitlab.com/gimbalabs/handshake-plutus
 
-### 1. Validation Logic = Updating DNS Datum
-- Is the datum above sufficient?
-- Should SOA and DNS records be immutable?
-- If not, who can change the SOA and DNS records?
-- MVP allows owner of domain to change SOA and DNS.
-- Who holds an admin token? Should admin token exist? With what powers?
+## Principles
+- Build for re-use
+- Build for recursive deployment
 
-### 2. Decide on minting logic ->  Minting Conditions
-- How is the domain name itself handled? -> At minting, `DNSReferenceDatum.origin` must match `TokenName`.
-- If Reference Datum matches token name, mint a token pair. 
-- Must mint token pair with matching names
-- One token must be minted to Reference Validator
-- Reference Datum must be valid
-- Domain token name must be unique -> best way to handle is with an App Token. Then use Maestro to determine if App signs Tx.
+## Outline
+- Reference Validation Logic: How to Update DNS Datum
+- Minting Logic
+- Token Naming
+- Auction Contracts
+- Governance Contracts
 
-### 3. Token Naming
-- CIP68-sufficient, or new standard for associated tokens?
-
-### 4. Answer questions above -> Development Roadmap
-
----
-
-## Case Study + General Design
-### Case Study: Minting a `.cardano` domain token
-
-### General design
-- Is recursive design part of MVP?
+## Usage:
+- In [Plutus Apps](https://github.com/input-output-hk/plutus-apps), `git checkout c4f4dc5fedd5b1804781abb7db0fb5a553e24ecb`
 
 ---
 
 ## Roadmap
-- [x] Create a set of dummy `DNSReferenceDatum` records at a validator address
-    - [x] Implement essential validator
-    - [x] For initial example, use simple minting policy as placeholder
-    - [x] Write basic scripts for minting token pairs
-    - [x] Use to create datum
-- [x] Add basic documentation for consuming `DNSReferenceDatum` at reference contract address
-- [ ] With team, answer questions above (sync / async?)
-- [ ] Fully implement reference validator
-- [ ] Fully implement minting validator
+
+### Reference Validation Logic: How to Update DNS Datum
+- [ ] Implement Update Logic
+
+### Minting Logic
+If these conditions are met, mint a token pair:
+- DNSReferenceDatum.origin must match TokenName.
+- TokenName must be new/unique
+- Must mint token pair with matching names
+- One token must be minted to Reference Validator
+- Reference Datum must be valid
+
+### Token Naming
+- Start by applying CIP-68. If we realize the need for a new standard, then create it.
+- Automate contract-based name validation
+
+### Auction Contracts
+- See https://en.wikipedia.org/wiki/Vickrey_auction
+- Handshake uses a modified Vickrey auction
+- Next Step: Define Auction Rules -> Implement in SC
+- Test a [Hydra implementation](https://hydra.family/head-protocol/use-cases/nft-auction/)
+
+### Governance Contracts
+- Apply SCG governance
+- What experiments do we want to run?
+
+### Nested Implementation
+- create an instance of N+1 domain - require locking of N in order to build instance
+- One address where all SLD Records are held
+- Another validator that handles TLD logic
+    - Includes some set of governance parameters
+- fractal n+1 level domain registration / minting
+- Mint an SLD on a Given TLD
+- revocation list for a given TLD
+- If I hold a TLD, I can:
+    - delegate it (permanently?) to a contract where I can mint SLDs
+
+- If I hold a SLD, I can:
+    - a. create or edit a DNS record at that SLD, OR
+    - b. create 3rdLDs on my SLD
