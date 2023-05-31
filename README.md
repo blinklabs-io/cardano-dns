@@ -24,6 +24,7 @@ data DNSReferenceDatum = DNSReferenceDatum
     origin  :: BuiltinByteString,
     ns      :: [BuiltinByteString]
   }
+```
 
 We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 ```json
