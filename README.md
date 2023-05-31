@@ -65,9 +65,15 @@ Using the above example, we can now build a zone file. Using the
 a `.cardano` domain with the data from our example. This is a simple proof of
 concept of transaction parsing using a remote API.
 
+* Using [gomaestro] API:
 ```bash
 export MAESTRO_API_KEY=${MAESTRO_API_KEY}
 python3 dns.py > cardano.zone
+```
+* Using [kupo] API:
+```bash
+pip install cbor2 uplc
+python3 dns-kupo.py > cardano.zone
 ```
 
 The current zone [file](cardano.zone) includes our datum from above.
@@ -134,3 +140,6 @@ If these conditions are met, mint a token pair:
 - If I hold a SLD, I can:
     - a. create or edit a DNS record at that SLD, OR
     - b. create 3rdLDs on my SLD
+
+[gomaestro]: https://www.gomaestro.org/
+[kupo]: https://github.com/CardanoSolutions/kupo/
