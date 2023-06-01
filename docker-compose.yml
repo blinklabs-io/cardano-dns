@@ -1,0 +1,73 @@
+version: "3.9"
+
+services:
+  cardano-node-ogmios:
+    restart: unless-stopped
+    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v5.6.0}_${CARDANO_NODE_VERSION:-1.35.7}-${NETWORK:-preprod}
+    ports:
+      - ${OGMIOS_PORT:-1337}:1337
+    volumes:
+      - node-db:/db
+      - node-ipc:/ipc
+      - node-config:/node-config
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "400k"
+        max-file: "20"
+    entrypoint: >
+      bash -c "cp -a /config/* /node-config/ && exec /tini -g -- /root/cardano-node-ogmios.sh"
+  kupo:
+    restart: unless-stopped
+    image: cardanosolutions/kupo:${KUPO_VERSION:-latest}
+    ports:
+      - ${KUPO_PORT:-1442}:1442
+# NOTE: you can also let kupo connect using node.socket with this config: with this config:
+#  command: >
+#      --host 0.0.0.0
+#      --port 1442
+#      --defer-db-indexes
+#      --node-config /config/cardano-node/config.json
+#      --node-socket /ipc/node.socket
+#      --workdir /db
+#      --since ${KUPO_START_SINCE:-origin}
+#      --match '${KUPO_MATCH_PATTERN:-*/*}'
+    command: >
+      --host 0.0.0.0
+      --port 1442
+      --defer-db-indexes
+      --ogmios-host cardano-node-ogmios
+      --ogmios-port ${OGMIOS_PORT:-1337}
+      --workdir /db
+      --since ${KUPO_START_SINCE:-origin}
+      --match '${KUPO_MATCH_PATTERN:-*/*}'
+    volumes:
+      - kupo-db:/db
+      - node-ipc:/ipc
+      - node-config:/config
+    depends_on:
+      - cardano-node-ogmios
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "400k"
+        max-file: "20"
+  cardano-zone-poller:
+    restart: unless-stopped
+    build:
+      context: .
+    environment:
+      - NETWORK=${NETWORK:-iohk-preprod}
+      - ADDRESS=${KUPO_MATCH_PATTERN:-addr_test1wqhlsl9dsny9d2hdc9uyx4ktj0ty0s8kxev4y9futq4qt4s5anczn}
+      - KUPO_URL=${KUPO_URL:-http://kupo:1442}
+    entrypoint: >
+      bash -c "while true; do python3 /app.py > /zonefile/cardano.zone 2> /dev/null; sleep 60; done"
+    volumes:
+      - zonefile:/zonefile
+
+volumes:
+  node-db:
+  node-ipc:
+  node-config:
+  kupo-db:
+  zonefile:
