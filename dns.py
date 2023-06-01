@@ -29,15 +29,11 @@ def main():
 
     for tx in txs:
         name = bytes.fromhex(tx['datum']['json']['fields'][0]['bytes']).decode()
-        origin = bytes.fromhex(tx['datum']['json']['fields'][1]['bytes']).decode()
-        soa_raw = tx['datum']['json']['fields'][2]['fields']
         ns_list = tx['datum']['json']['fields'][3]['list']
 
-        if origin.split(".")[-1] == 'cardano':
-            cardano[name] = dict({"origin": origin})
-            for ns in ns_list:
-                print(name + " IN NS " + bytes.fromhex(ns['bytes']).decode() + ".")
-                print(bytes.fromhex(ns['bytes']).decode() + ". IN A 172.17.0.1")
+        for ns in ns_list:
+            print(name + " IN NS " + bytes.fromhex(ns['bytes']).decode() + ".")
+            print(bytes.fromhex(ns['bytes']).decode() + ". IN A 172.17.0.1")
 
 if __name__ == '__main__':
     main()

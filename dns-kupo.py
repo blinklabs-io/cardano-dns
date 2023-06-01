@@ -7,9 +7,9 @@ import time
 import uplc
 import cbor2
 
-ADDRESS = 'addr_test1wqgf0d7rdlamdy46hd5u5wq47ql9chvv8w3k70nyqcfgd2qwpvxpx'
-NETWORK = 'iohk-preprod'
-KUPO_URL = 'https://d.kupo-api.' + NETWORK + '.dandelion.link'
+ADDRESS = os.getenv('ADDRESS', 'addr_test1wqhlsl9dsny9d2hdc9uyx4ktj0ty0s8kxev4y9futq4qt4s5anczn')
+NETWORK = os.getenv('NETWORK', 'iohk-preprod')
+KUPO_URL = os.getenv('KUPO_URL', 'https://d.kupo-api.' + NETWORK + '.dandelion.link')
 
 def main():
     custom_headers = {"Content-Type": "application/json"}
@@ -31,15 +31,11 @@ def main():
         datum_json = uplc.ast.data_from_cbortag(cbor2.loads(bytes.fromhex(datum_bytes))).to_json()
         
         name = bytes.fromhex(datum_json['fields'][0]['bytes']).decode()
-        origin = bytes.fromhex(datum_json['fields'][1]['bytes']).decode()
-        soa_raw = datum_json['fields'][2]['fields']
-        ns_list = datum_json['fields'][3]['list']
+        ns_list = datum_json['fields'][1]['list']
 
-        if origin.split(".")[-1] == 'cardano':
-            cardano[name] = dict({"origin": origin})
-            for ns in ns_list:
-                print(name + " IN NS " + bytes.fromhex(ns['bytes']).decode() + ".")
-                print(bytes.fromhex(ns['bytes']).decode() + ". IN A 172.17.0.1")
+        for ns in ns_list:
+            print(name + " IN NS " + bytes.fromhex(ns['bytes']).decode() + ".")
+            print(bytes.fromhex(ns['bytes']).decode() + ". IN A 172.17.0.1")
 
 if __name__ == '__main__':
     main()
