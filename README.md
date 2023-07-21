@@ -17,12 +17,17 @@ How do we want to handle this case? Owner should hold a token named `theirdomain
 ---
 
 ## DNSReferenceDatum
+> Updated 2023-07-21
 
 ```haskell
-data DNSReferenceDatum = DNSReferenceDatum
-  {
-    origin  :: BuiltinByteString,
-    ns      :: [BuiltinByteString]
+data NSandIP = NSandIP {
+  ns :: BuiltinByteString,
+  ip :: BuiltinByteString
+}
+
+data ReferenceValidatorDatum = ReferenceValidatorDatum
+  { origin  :: BuiltinByteString,
+    nsList  :: [NSandIP]
   }
 ```
 
@@ -31,29 +36,39 @@ We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 {
   "constructor": 0,
   "fields": [
-    { "bytes": "73696d706c652e63617264616e6f" },
-    {
-      "list": [
-        { "bytes": "6e73312e73696d706c652e63617264616e6f" },
-        { "bytes": "6e73322e73696d706c652e63617264616e6f" }
-      ]
-    }
+    { "bytes": "736e6f726b656c2e63617264616e6f" },
+    { "list": [
+      {
+        "constructor": 0,
+        "fields": [
+          { "bytes": "6e73312e736e6f726b656c2e63617264616e6f" },
+          { "bytes": "302e302e302e30" }
+        ]
+      },
+      {
+        "constructor": 0,
+        "fields": [
+          { "bytes": "6e73322e736e6f726b656c2e63617264616e6f" },
+          { "bytes": "34322e34322e33312e3331" }
+        ]
+      }
+    ]}
   ]
 }
 ```
 
 ## Example
-Updated 2023-05-31 with new DNS Reference Validator Address `addr_test1wqhlsl9dsny9d2hdc9uyx4ktj0ty0s8kxev4y9futq4qt4s5anczn`
+Updated 2023-07-21 with new DNS Reference Validator Address `addr_test1wpf6lxntd3dztphew0m5dagrs7ptjcg9g6vgjyazt7mw44gdnwq0h`
 
-Query this example of a DNS Reference Validator Address: [addr_test1wqhlsl9dsny9d2hdc9uyx4ktj0ty0s8kxev4y9futq4qt4s5anczn](https://preprod.cardanoscan.io/address/702ff87cad84c856aaedc1784356cb93d647c0f6365952153c582a05d6)
+Query this example of a DNS Reference Validator Address: [addr_test1wpf6lxntd3dztphew0m5dagrs7ptjcg9g6vgjyazt7mw44gdnwq0h](https://preprod.cardanoscan.io/address/7053af9a6b6c5a2586f973f746f5038782b9610546988913a25fb6ead5)
 
 For example with `https://preprod.gomaestro-api.org/addresses/utxos`:
 ```bash
 curl -X POST \
   -H "api-key: ${MAESTRO_API_KEY}" \
-  https://preprod.gomaestro-api.org/addresses/utxos \
+  https://preprod.gomaestro-api.org/v1/addresses/utxos \
   -H "Content-Type: application/json" \
-  -d '["addr_test1wqhlsl9dsny9d2hdc9uyx4ktj0ty0s8kxev4y9futq4qt4s5anczn"]'
+  -d '["addr_test1wpf6lxntd3dztphew0m5dagrs7ptjcg9g6vgjyazt7mw44gdnwq0h"]'
 ```
 
 See [Example response](example.json)
