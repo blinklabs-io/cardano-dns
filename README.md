@@ -93,6 +93,11 @@ python3 dns-kupo.py > cardano.zone
 
 The current zone [file](cardano.zone) includes our datum from above.
 
+* Using [chnsd]:
+The `chnsd` daemon is a purpose-built indexer and DNS server.
+
+https://github.com/blinklabs-io/chnsd
+
 ---
 
 # Handshake Plutus
@@ -121,7 +126,8 @@ Repo: https://gitlab.com/gimbalabs/handshake-plutus
 
 ### Minting Logic
 If these conditions are met, mint a token pair:
-- DNSReferenceDatum.origin must match TokenName.
+- DNSReferenceDatum.origin must match TokenName
+- DNSReferenceDatum.origin must meet DNS validation rules
 - TokenName must be new/unique
 - Must mint token pair with matching names
 - One token must be minted to Reference Validator
