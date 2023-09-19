@@ -1,10 +1,9 @@
-zone "cardano" {
+zone "dolphin.cardano" {
     type master;
-    file "/var/lib/bind/cardano.zone";
+    file "/var/lib/bind/dolphin.zone";
 };
 
-// This is just for demo
-zone "treehouse.cardano" {
+zone "snorkel.cardano" {
     type master;
-    file "/var/lib/bind/treehouse.zone";
+    file "/var/lib/bind/snorkel.zone";
 };

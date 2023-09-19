@@ -1,17 +1,31 @@
 #!/usr/bin/env bash
 
+echo Starting cdnsd root server
+docker run -d \
+	--name cdnsd-container \
+	-e DNS_LISTEN_PORT=53 \
+	-e STATE_DIR=/tmp/.state \
+	-p 20053:53 \
+        --ip 69.69.42.42 \
+	-v $(pwd -P)/.state:/tmp/.state \
+	-u root \
+	ghcr.io/blinklabs-io/cdnsd:main
+
+sleep 10
+__root=$(docker inspect cdnsd-container | jq -r .[].NetworkSettings.IPAddress)
+
 echo Starting BIND server container
 docker run -d \
 	--name bind9-container \
 	-e TZ=UTC \
 	-p 30053:53 \
+	--ip 42.42.31.31 \
 	-v $(pwd -P)/bind/named.conf.options:/etc/bind/named.conf.options \
 	-v $(pwd -P)/bind/named.conf.default-zones:/etc/bind/named.conf.default-zones \
 	-v $(pwd -P)/bind/named.conf.local:/etc/bind/named.conf.local \
 	-v $(pwd -P)/bind/root.hints:/usr/share/dns/root.hints \
-	-v $(pwd -P)/bind/root.zone:/var/lib/bind/root.zone \
-	-v $(pwd -P)/cardano.zone:/var/lib/bind/cardano.zone \
-	-v $(pwd -P)/bind/treehouse.zone:/var/lib/bind/treehouse.zone \
+	-v $(pwd -P)/bind/dolphin.zone:/var/lib/bind/dolphin.zone \
+	-v $(pwd -P)/bind/snorkel.zone:/var/lib/bind/snorkel.zone \
 	ubuntu/bind9:9.18-22.04_beta
 
 sleep 1
@@ -38,15 +52,15 @@ sleep 1
 echo
 echo
 
-echo Looking up ns1.treehouse.cardano A records
-dig @${__dns} ns1.treehouse.cardano A
+echo Looking up ns1.dolphin.cardano A records
+dig @${__dns} ns1.dolphin.cardano A
 sleep 1
 
 echo
 echo
 
-echo Looking up www.treehouse.cardano CNAME record
-dig @${__dns} www.treehouse.cardano CNAME
+echo Looking up www.dolphin.cardano CNAME record
+dig @${__dns} www.dolphin.cardano CNAME
 sleep 1
 
 echo
@@ -66,4 +80,17 @@ dig @103.196.38.39 +short namebase A
 sleep 1
 
 
+echo
+echo
+
+echo cdnsd logs
+docker logs cdnsd-container
+
+echo
+echo
+
+echo bind9 logs
+docker logs bind9-container
+
 docker rm -f bind9-container 2>&1 >/dev/null
+docker rm -f cdnsd-container 2>&1 >/dev/null

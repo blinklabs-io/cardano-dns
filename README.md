@@ -93,10 +93,10 @@ python3 dns-kupo.py > cardano.zone
 
 The current zone [file](cardano.zone) includes our datum from above.
 
-* Using [chnsd]:
-The `chnsd` daemon is a purpose-built indexer and DNS server.
+* Using [cdnsd]:
+The `cdnsd` daemon is a purpose-built indexer and DNS server.
 
-https://github.com/blinklabs-io/chnsd
+https://github.com/blinklabs-io/cdnsd
 
 ---
 
