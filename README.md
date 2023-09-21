@@ -1,5 +1,14 @@
-# cardano-handshake
-Shared space for information about Handshake on Cardano
+# cardano-dns
+Shared space for information about decentralized DNS on Cardano
+
+This repo describes the decentralized DNS system designed by several teams.
+
+- The Silk Toad
+- Gimbalabs
+- Blink Labs
+
+The goal is a standard for creating decentralized DNS services on Cardano,
+backed by data on the blockchain.
 
 ---
 
@@ -93,14 +102,14 @@ python3 dns-kupo.py > cardano.zone
 
 The current zone [file](cardano.zone) includes our datum from above.
 
-* Using [chnsd]:
-The `chnsd` daemon is a purpose-built indexer and DNS server.
+* Using [cdnsd]:
+The `cdnsd` daemon is a purpose-built indexer and DNS server.
 
-https://github.com/blinklabs-io/chnsd
+https://github.com/blinklabs-io/cdnsd
 
 ---
 
-# Handshake Plutus
+# Plutus Contracts
 Repo: https://gitlab.com/gimbalabs/handshake-plutus
 
 ## Principles
@@ -139,7 +148,7 @@ If these conditions are met, mint a token pair:
 
 ### Auction Contracts
 - See https://en.wikipedia.org/wiki/Vickrey_auction
-- Handshake uses a modified Vickrey auction
+- Handshake uses a modified Vickrey auction, emulate this
 - Next Step: Define Auction Rules -> Implement in SC
 - Test a [Hydra implementation](https://hydra.family/head-protocol/use-cases/nft-auction/)
 
