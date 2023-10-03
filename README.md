@@ -136,7 +136,7 @@ We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 
 
 ## Example
-Updated 2023-07-21 with new DNS Reference Validator Address `addr_test1vpzje979n2swggeu24ehty8nka2fh7zu3jykfrazfwfff4c2yvx4d`
+Updated 2023-10-03 with new DNS Reference Validator Address `addr_test1vpzje979n2swggeu24ehty8nka2fh7zu3jykfrazfwfff4c2yvx4d`
 
 Query this example of a DNS Reference Validator Address: [addr_test1vpzje979n2swggeu24ehty8nka2fh7zu3jykfrazfwfff4c2yvx4d](https://preprod.cardanoscan.io/address/7053af9a6b6c5a2586f973f746f5038782b9610546988913a25fb6ead5)
 
