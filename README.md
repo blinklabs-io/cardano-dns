@@ -26,58 +26,127 @@ How do we want to handle this case? Owner should hold a token named `theirdomain
 ---
 
 ## DNSReferenceDatum
-> Updated 2023-07-21
+> Updated 2023-10-03
 
 ```haskell
-data NSandIP = NSandIP {
-  ns :: BuiltinByteString,
-  ip :: BuiltinByteString
-}
+data DNSRecord = DNSRecord
+    {   ns   :: BuiltinByteString
+    ,   ds   :: Maybe BuiltinByteString
+    ,   ipV4 :: Maybe [Integer]
+    ,   ipV6 :: Maybe [BuiltinByteString]
+    }
 
-data ReferenceValidatorDatum = ReferenceValidatorDatum
-  { origin  :: BuiltinByteString,
-    nsList  :: [NSandIP]
-  }
+
+data DNSReferenceDatum = DNSReferenceDatum
+    {   origin     :: TokenName
+    ,   dnsRecords :: [DNSRecord]
+    }
 ```
 
 We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 ```json
 {
-  "constructor": 0,
+  "constructor": 1,
   "fields": [
-    { "bytes": "736e6f726b656c2e63617264616e6f" },
-    { "list": [
-      {
-        "constructor": 0,
-        "fields": [
-          { "bytes": "6e73312e736e6f726b656c2e63617264616e6f" },
-          { "bytes": "302e302e302e30" }
-        ]
-      },
-      {
-        "constructor": 0,
-        "fields": [
-          { "bytes": "6e73322e736e6f726b656c2e63617264616e6f" },
-          { "bytes": "34322e34322e33312e3331" }
-        ]
-      }
-    ]}
+    {
+      "bytes": "736e6f726b656c2e63617264616e6f"
+    },
+    {
+      "list": [
+        {
+          "constructor": 1,
+          "fields": [
+            {
+              "bytes": "6e73312e736e6f726b656c2e63617264616e6f"
+            },
+            {
+              "bytes": "686f73742e736e6f726b656c2e63617264616e6f"
+            }
+          ]
+        },
+        {
+          "constructor": 1,
+          "fields": [
+            {
+              "bytes": "6e73322e736e6f726b656c2e63617264616e6f"
+            },
+            {
+              "list": [
+                {
+                  "int": 42
+                },
+                {
+                  "int": 42
+                },
+                {
+                  "int": 31
+                },
+                {
+                  "int": 31
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
 }
 ```
 
-## Example
-Updated 2023-07-21 with new DNS Reference Validator Address `addr_test1wpf6lxntd3dztphew0m5dagrs7ptjcg9g6vgjyazt7mw44gdnwq0h`
+### Example Root Domain Record
+```json
+{
+  "constructor": 1,
+  "fields": [
+    {
+      "bytes": "63617264616e6f"
+    },
+    {
+      "list": [
+        {
+          "constructor": 1,
+          "fields": [
+            {
+              "bytes": "2e63617264616e6f"
+            },
+            {
+              "list": [
+                {
+                  "int": 171
+                },
+                {
+                  "int": 172
+                },
+                {
+                  "int": 173
+                },
+                {
+                  "int": 174
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
 
-Query this example of a DNS Reference Validator Address: [addr_test1wpf6lxntd3dztphew0m5dagrs7ptjcg9g6vgjyazt7mw44gdnwq0h](https://preprod.cardanoscan.io/address/7053af9a6b6c5a2586f973f746f5038782b9610546988913a25fb6ead5)
+
+## Example
+Updated 2023-07-21 with new DNS Reference Validator Address `addr_test1vpzje979n2swggeu24ehty8nka2fh7zu3jykfrazfwfff4c2yvx4d`
+
+Query this example of a DNS Reference Validator Address: [addr_test1vpzje979n2swggeu24ehty8nka2fh7zu3jykfrazfwfff4c2yvx4d](https://preprod.cardanoscan.io/address/7053af9a6b6c5a2586f973f746f5038782b9610546988913a25fb6ead5)
 
 For example with `https://preprod.gomaestro-api.org/addresses/utxos`:
 ```bash
 curl -X POST \
-  -H "api-key: ${MAESTRO_API_KEY}" \
+  -H "api-key: ${MAESTRO_API_KEY_PREPROD}" \
   https://preprod.gomaestro-api.org/v1/addresses/utxos \
   -H "Content-Type: application/json" \
-  -d '["addr_test1wpf6lxntd3dztphew0m5dagrs7ptjcg9g6vgjyazt7mw44gdnwq0h"]'
+  -d '["addr_test1vpzje979n2swggeu24ehty8nka2fh7zu3jykfrazfwfff4c2yvx4d"]'
 ```
 
 See [Example response](example.json)
