@@ -26,20 +26,21 @@ How do we want to handle this case? Owner should hold a token named `theirdomain
 ---
 
 ## DNSReferenceDatum
-> Updated 2023-10-03
+> Updated 2023-11-08
 
 ```haskell
 data DNSRecord = DNSRecord
-    {   ns   :: BuiltinByteString
-    ,   ds   :: Maybe BuiltinByteString
-    ,   ipV4 :: Maybe [Integer]
-    ,   ipV6 :: Maybe [BuiltinByteString]
+    {   lhs   :: BuiltinByteString
+    ,   ttl   :: Maybe Integer
+    ,   rtype :: BuiltinByteString
+    ,   rdata :: BuiltinByteString
     }
 
 
 data DNSReferenceDatum = DNSReferenceDatum
-    {   origin     :: TokenName
-    ,   dnsRecords :: [DNSRecord]
+    {   origin         :: TokenName
+    ,   dnsRecords     :: [DNSRecord]
+    ,   additionalData :: Maybe BuiltinData
     }
 ```
 
