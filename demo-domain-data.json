@@ -1,0 +1,23 @@
+[
+	{
+		"origin": ".",
+		"records": [
+			".,ns,ns1.cardano",
+			"ns1.cardano,a,172.28.0.2"
+		]
+	},
+	{
+		"origin": "cardano",
+		"records": [
+			"cardano,ns,ns1.cardano",
+			"ns1.cardano,a,172.28.0.2"
+		]
+	},
+	{
+		"origin": "dolphin.cardano",
+		"records": [
+			"dolphin.cardano,ns,ns1.dolphin.cardano",
+			"ns1.dolphin.cardano,a,172.28.0.3"
+		]
+	}
+]
