@@ -1,0 +1,9 @@
+$ORIGIN snorkel.cardano.
+$TTL 60
+@ IN SOA ns1.snorkel.cardano. hostmaster.snorkel.cardano. 1683773269 21600 3600 604800 60
+  IN NS ns1.snorkel.cardano.
+  IN NS ns2.snorkel.cardano.
+  IN A 42.42.31.31
+ns1 IN A 42.42.31.31
+ns2 IN A 42.42.31.31
+www IN CNAME www.cloudflare.com.
