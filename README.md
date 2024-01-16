@@ -47,99 +47,92 @@ data DNSReferenceDatum = DNSReferenceDatum
 We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 ```json
 {
-  "constructor": 1,
-  "fields": [
-    {
-      "bytes": "736e6f726b656c2e63617264616e6f"
-    },
-    {
-      "list": [
-        {
-          "constructor": 1,
-          "fields": [
-            {
-              "bytes": "6e73312e736e6f726b656c2e63617264616e6f"
-            },
-            {
-              "bytes": "686f73742e736e6f726b656c2e63617264616e6f"
-            }
-          ]
-        },
-        {
-          "constructor": 1,
-          "fields": [
-            {
-              "bytes": "6e73322e736e6f726b656c2e63617264616e6f"
-            },
-            {
-              "list": [
-                {
-                  "int": 42
-                },
-                {
-                  "int": 42
-                },
-                {
-                  "int": 31
-                },
-                {
-                  "int": 31
-                }
-              ]
-            }
-          ]
-        }
+   constructor: 1,
+   fields: [
+      {
+         bytes: "646f6c7068696e2e63617264616e6f"
+      },
+      [
+         {
+            constructor: 1,
+            fields: [
+               {
+                  bytes: "646f6c7068696e2e63617264616e6f"
+               },
+               {
+                  bytes: "6e73"
+               },
+               {
+                  bytes: "6e73312e646f6c7068696e2e63617264616e6f"
+               }
+            ]
+         },
+         {
+            constructor: 1,
+            fields: [
+               {
+                  bytes: "6e73312e646f6c7068696e2e63617264616e6f"
+               },
+               {
+                  bytes: "61"
+               },
+               {
+                  bytes: "3137322e32382e302e33"
+               }
+            ]
+         }
       ]
-    }
-  ]
+   ]
 }
 ```
 
 ### Example Root Domain Record
 ```json
 {
-  "constructor": 1,
-  "fields": [
-    {
-      "bytes": "63617264616e6f"
-    },
-    {
-      "list": [
-        {
-          "constructor": 1,
-          "fields": [
-            {
-              "bytes": "2e63617264616e6f"
-            },
-            {
-              "list": [
-                {
-                  "int": 171
-                },
-                {
-                  "int": 172
-                },
-                {
-                  "int": 173
-                },
-                {
-                  "int": 174
-                }
-              ]
-            }
-          ]
-        }
+   constructor: 1,
+   fields: [
+      {
+         bytes: "2e"
+      },
+      [
+         {
+            constructor: 1,
+            fields: [
+               {
+                  bytes: "2e"
+               },
+               {
+                  bytes: "6e73"
+               },
+               {
+                  bytes: "6e73312e63617264616e6f"
+               }
+            ]
+         },
+         {
+            constructor: 1,
+            fields: [
+               {
+                  bytes: "6e73312e63617264616e6f"
+               },
+               {
+                  bytes: "61"
+               },
+               {
+                  bytes: "3137322e32382e302e32"
+               }
+            ]
+         }
       ]
-    }
-  ]
+   ]
 }
 ```
 
 
 ## Example
-Updated 2023-10-03 with new DNS Reference Validator Address `addr_test1vpzje979n2swggeu24ehty8nka2fh7zu3jykfrazfwfff4c2yvx4d`
+Updated 2024-01-14 with new DNS Reference Validator Address `addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54`
 
-Query this example of a DNS Reference Validator Address: [addr_test1vpzje979n2swggeu24ehty8nka2fh7zu3jykfrazfwfff4c2yvx4d](https://preprod.cardanoscan.io/address/7053af9a6b6c5a2586f973f746f5038782b9610546988913a25fb6ead5)
+Query this example of a DNS Reference Validator Address: [addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54](https://preprod.cardanoscan.io/address/addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54)
 
 For example with `https://preprod.gomaestro-api.org/addresses/utxos`:
 ```bash
@@ -147,7 +140,7 @@ curl -X POST \
   -H "api-key: ${MAESTRO_API_KEY_PREPROD}" \
   https://preprod.gomaestro-api.org/v1/addresses/utxos \
   -H "Content-Type: application/json" \
-  -d '["addr_test1vpzje979n2swggeu24ehty8nka2fh7zu3jykfrazfwfff4c2yvx4d"]'
+  -d '["addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54"]'
 ```
 
 See [Example response](example.json)
