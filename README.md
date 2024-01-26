@@ -13,20 +13,41 @@ backed by data on the blockchain.
 ---
 
 ## How it works
-- Mint two tokens, associated by name (see note): "Reference Token" and "Owner Token"
-- At minting, Owner Token is sent to wallet address of buyer
-- At minting, Reference Token is sent to Reference Contract Address
+- Mint two tokens, associated by name (see note): "DNS Reference Token" and "HNS Token"
+- When an Auction is initialized, the HNS Token is locked in an Auction
+- When the Auction is completed and the HNS Token is claimed, the DNS Reference Token is sent to Reference Contract Address
 - Datum with Reference Token at Ref. Contract Address contains `DNSReferenceDatum`, which is our on-chain record.
+- For more details see `/docs/app-architecture.md`
 
-### Questions
-- Currently using simple naming convention with `222` prefix on Owner token and `100` prefix on Reference token. This naming doesn't feel right. A broader group is moving toward new CIP.
+## Three Unique Token Policy IDs - Same Token Name
+1. Domain Ownership HNS Token - eventually ends up in owner's wallet -- but it goes on a journey to get there (see below)
+2. DNS Reference Authentication Token (DRAT) - locked at DNS Reference Validator with DNS Reference Datum
+3. Bidding Token (MHABAT) "Minting HNS Auction Bidding Authentication Token" - the token name matches the HNS token being bid upon.
 
-How do we want to handle this case? Owner should hold a token named `theirdomain.cardano` - in which case, what do we name the reference token? `REFtheirdomain.cardano`?
+## On-Chain Examples - To be Posted 2024-01-29:
+1. Correct PolicyID + Correct Token Name + Correct Datum
+2. Correct Datum, but no Asset
+3. Correct Datum, but wrong Asset Policy Id
+
+## We think this case is no possible:
+- Good Datum, correct PolicyID, but mismatched Token Name -- validators prevent this case -- Adrian is checking for loopholes
+
+## Example Usage `write_datums`:
+
+```bash
+cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "example_4" "example.com,3600,A,192.168.1.1;example.com,,AAAA,2001:0db8:85a3:0000:0000:8a2e:0370:7334;www.example.com,28800,CNAME,example.com;example.com,42069,MX,mail.example.com;example.com,3600456, TXT, 'v=spf1 mx -all';example.com,,NS,ns1.example.com" ""
+```
+
+```bash
+cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "treehouse" "treehouse.cardano,3600,A,192.168.1.1;treehouse.cardano,,ns,ns1.treehouse.cardano;treehouse.cardano,28800,CNAME,treehouse.cardano" ""
+```
+
+## Todo: Make a List of All System Parameters
 
 ---
 
 ## DNSReferenceDatum
-> Updated 2023-11-08
+> Updated 2024-01-26
 
 ```haskell
 data DNSRecord = DNSRecord
@@ -44,45 +65,88 @@ data DNSReferenceDatum = DNSReferenceDatum
     }
 ```
 
+### Example `DNSReferenceDatum`
+Updated 2024-01-26. Will be posted on-chain 2024-01-29:
+
 We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 ```json
 {
-   constructor: 1,
-   fields: [
-      {
-         bytes: "646f6c7068696e2e63617264616e6f"
-      },
-      [
-         {
-            constructor: 1,
-            fields: [
-               {
-                  bytes: "646f6c7068696e2e63617264616e6f"
-               },
-               {
-                  bytes: "6e73"
-               },
-               {
-                  bytes: "6e73312e646f6c7068696e2e63617264616e6f"
-               }
+    "constructor": 1,
+    "fields": [
+        {
+            "bytes": "74726565686f757365"
+        },
+        {
+            "list": [
+                {
+                    "constructor": 1,
+                    "fields": [
+                        {
+                            "bytes": "74726565686f7573652e63617264616e6f"
+                        },
+                        {
+                            "constructor": 0,
+                            "fields": [
+                                {
+                                    "int": 3600
+                                }
+                            ]
+                        },
+                        {
+                            "bytes": "3139322e3136382e312e31"
+                        },
+                        {
+                            "bytes": "41"
+                        }
+                    ]
+                },
+                {
+                    "constructor": 1,
+                    "fields": [
+                        {
+                            "bytes": "74726565686f7573652e63617264616e6f"
+                        },
+                        {
+                            "constructor": 1,
+                            "fields": []
+                        },
+                        {
+                            "bytes": "6e73312e74726565686f7573652e63617264616e6f"
+                        },
+                        {
+                            "bytes": "6e73"
+                        }
+                    ]
+                },
+                {
+                    "constructor": 1,
+                    "fields": [
+                        {
+                            "bytes": "74726565686f7573652e63617264616e6f"
+                        },
+                        {
+                            "constructor": 0,
+                            "fields": [
+                                {
+                                    "int": 28800
+                                }
+                            ]
+                        },
+                        {
+                            "bytes": "74726565686f7573652e63617264616e6f"
+                        },
+                        {
+                            "bytes": "434e414d45"
+                        }
+                    ]
+                }
             ]
-         },
-         {
-            constructor: 1,
-            fields: [
-               {
-                  bytes: "6e73312e646f6c7068696e2e63617264616e6f"
-               },
-               {
-                  bytes: "61"
-               },
-               {
-                  bytes: "3137322e32382e302e33"
-               }
-            ]
-         }
-      ]
-   ]
+        },
+        {
+            "constructor": 1,
+            "fields": []
+        }
+    ]
 }
 ```
 
@@ -129,7 +193,7 @@ We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 ```
 
 
-## Example
+## Example - Updates coming 2024-01-29
 Updated 2024-01-14 with new DNS Reference Validator Address `addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54`
 
 Query this example of a DNS Reference Validator Address: [addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54](https://preprod.cardanoscan.io/address/addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54)
