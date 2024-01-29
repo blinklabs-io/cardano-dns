@@ -29,3 +29,8 @@ cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "orca" "orca.erg
 ```bash
 cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "example_4" "example.com,3600,A,192.168.1.1;example.com,,AAAA,2001:0db8:85a3:0000:0000:8a2e:0370:7334;www.example.com,28800,CNAME,example.com;example.com,42069,MX,mail.example.com;example.com,3600456, TXT, 'v=spf1 mx -all';example.com,,NS,ns1.example.com" ""
 ```
+
+### `.cardano`
+```bash
+cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "." ".cardano,,A,172.28.0.2;.cardano,,ns,n1.cardano." ""
+```
