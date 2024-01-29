@@ -13,41 +13,61 @@ backed by data on the blockchain.
 ---
 
 ## How it works
-- Mint two tokens, associated by name (see note): "DNS Reference Token" and "HNS Token"
-- When an Auction is initialized, the HNS Token is locked in an Auction
-- When the Auction is completed and the HNS Token is claimed, the DNS Reference Token is sent to Reference Contract Address
+- The outcome of the auction system is to mint two tokens, associated by name: DNS Reference Token (`DRAT`) and `HNS Token`
+- When an Auction is initialized, the HNS Token is minted and locked in an Auction
+- When the Auction is completed and the HNS Token is claimed, the DNS Reference Token is minted and sent to DNS Reference Contract Address
 - Datum with Reference Token at Ref. Contract Address contains `DNSReferenceDatum`, which is our on-chain record.
-- For more details see `/docs/app-architecture.md`
+- For more details see [/docs/app-architecture.md](/docs/app-architecture.md)
 
 ## Three Unique Token Policy IDs - Same Token Name
-1. Domain Ownership HNS Token - eventually ends up in owner's wallet -- but it goes on a journey to get there (see below)
-2. DNS Reference Authentication Token (DRAT) - locked at DNS Reference Validator with DNS Reference Datum
-3. Bidding Token (MHABAT) "Minting HNS Auction Bidding Authentication Token" - the token name matches the HNS token being bid upon.
+1. Domain Ownership is represented by `HNS Token` - eventually ends up in owner's wallet.
+2. DNS Reference Authentication Token (`DRAT`) - locked at DNS Reference Validator with DNS Reference Datum
+3. Bidding Token (`MHABAT`) "Minting HNS Auction Bidding Authentication Token" - the token name matches the HNS token being bid upon.
 
-## On-Chain Examples - To be Posted 2024-01-29:
-1. Correct PolicyID + Correct Token Name + Correct Datum
-2. Correct Datum, but no Asset
-3. Correct Datum, but wrong Asset Policy Id
+---
 
-## We think this case is no possible:
+# Testing 2024-01-29
+
+## On-Chain Examples
+Updated 2024-01-29 with temporary DNS Reference Testing Address [addr_test1vr75xezmpxastymx985l3gamuxrwqdwcfrcnjlygs55aynsqu3edq](https://preprod.cardanoscan.io/address/addr_test1vr75xezmpxastymx985l3gamuxrwqdwcfrcnjlygs55aynsqu3edq)
+
+Query with `https://preprod.gomaestro-api.org/addresses/utxos`:
+```bash
+curl -X POST \
+  -H "api-key: ${MAESTRO_API_KEY_PREPROD}" \
+  https://preprod.gomaestro-api.org/v1/addresses/utxos \
+  -H "Content-Type: application/json" \
+  -d '["addr_test1vr75xezmpxastymx985l3gamuxrwqdwcfrcnjlygs55aynsqu3edq"]'
+```
+
+See [Example response](example.json)
+
+## When Testing, Look For:
+1. Correct PolicyID + Correct Token Name + Correct Datum: `treehouse.cardano`, `dolphin.cardano`
+2. Ok Datum, but no Asset: `ghost.cardano`
+3. Correct Datum, but wrong Asset Policy Id: `dolphin.cardano`, `whale.cardano`
+4. Correct PolicyID + Correct Token Name, but trying to use wrong TLD: `orca.ergo`
+
+> See [/docs/write-datums-examples.md](/docs/write-datums-examples.md)
+
+## We think this case is not possible:
 - Good Datum, correct PolicyID, but mismatched Token Name -- validators prevent this case -- Adrian is checking for loopholes
 
-## Example Usage `write_datums`:
+### Parameters
+- Testing Address: `addr_test1vr75xezmpxastymx985l3gamuxrwqdwcfrcnjlygs55aynsqu3edq`
+- Correct `.cardano` PolicyID: `6af60c2a7a06551ef09b3810a41d086b26ca26f926d22e462103194d`
+- "Wrong" PolicyID Example: `602406ccbbbc071846eb38d1db876b90d6233747b626e38c8255ca7a` (could be any policy ID other than the correct `.cardano` one)
 
-```bash
-cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "example_4" "example.com,3600,A,192.168.1.1;example.com,,AAAA,2001:0db8:85a3:0000:0000:8a2e:0370:7334;www.example.com,28800,CNAME,example.com;example.com,42069,MX,mail.example.com;example.com,3600456, TXT, 'v=spf1 mx -all';example.com,,NS,ns1.example.com" ""
-```
+### Notes
+- TLD is not included in the `TokenName`. The TLD is implied by the `CurrencySymbol`
+- Check that resolver rejects other TLDs. `orca.ergo` is provided as an example
 
-```bash
-cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "treehouse" "treehouse.cardano,3600,A,192.168.1.1;treehouse.cardano,,ns,ns1.treehouse.cardano;treehouse.cardano,28800,CNAME,treehouse.cardano" ""
-```
-
-## Todo: Make a List of All System Parameters
+### Todo: Make a List of All System Parameters
 
 ---
 
 ## DNSReferenceDatum
-> Updated 2024-01-26
+> Updated 2024-01-29
 
 ```haskell
 data DNSRecord = DNSRecord
@@ -66,7 +86,7 @@ data DNSReferenceDatum = DNSReferenceDatum
 ```
 
 ### Example `DNSReferenceDatum`
-Updated 2024-01-26. Will be posted on-chain 2024-01-29:
+Updated 2024-01-29.
 
 We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 ```json
@@ -192,22 +212,6 @@ We can write `DNSReferenceDatum` on-chain as inline datum, formatted as `.json`:
 }
 ```
 
-
-## Example - Updates coming 2024-01-29
-Updated 2024-01-14 with new DNS Reference Validator Address `addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54`
-
-Query this example of a DNS Reference Validator Address: [addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54](https://preprod.cardanoscan.io/address/addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54)
-
-For example with `https://preprod.gomaestro-api.org/addresses/utxos`:
-```bash
-curl -X POST \
-  -H "api-key: ${MAESTRO_API_KEY_PREPROD}" \
-  https://preprod.gomaestro-api.org/v1/addresses/utxos \
-  -H "Content-Type: application/json" \
-  -d '["addr_test1vzetgvj80ut4pfg02z7jncgpg4lzj4nt6rtcpmtywfce58gjvkr54"]'
-```
-
-See [Example response](example.json)
 
 ### Creating a .cardano zone file
 
