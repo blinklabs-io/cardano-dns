@@ -603,13 +603,88 @@
             "txout_cbor": null
         },
         {
-            "tx_hash": "e518c991fc25311c5c6f2f8e77cd818dbe9a657fbc21fa2827d7c4549d82f8fa",
-            "index": 1,
-            "slot": 50847315,
+            "tx_hash": "6446524a703e86f3e58f25c4a8bdf8f7c243dd486081607d7bd58167889044d0",
+            "index": 0,
+            "slot": 50849992,
             "assets": [
                 {
                     "unit": "lovelace",
-                    "amount": 86215674
+                    "amount": 2000000
+                },
+                {
+                    "unit": "6af60c2a7a06551ef09b3810a41d086b26ca26f926d22e462103194d2e",
+                    "amount": 1
+                }
+            ],
+            "address": "addr_test1vr75xezmpxastymx985l3gamuxrwqdwcfrcnjlygs55aynsqu3edq",
+            "datum": {
+                "type": "inline",
+                "hash": "751cc0be2cef075d80db433bcac856fd895035bea91c4877aa34208206301551",
+                "bytes": "d87a9f412e9fd87a9f482e63617264616e6fd87a804a3137322e32382e302e324141ffd87a9f482e63617264616e6fd87a804b6e312e63617264616e6f2e426e73ffffd87a80ff",
+                "json": {
+                    "constructor": 1,
+                    "fields": [
+                        {
+                            "bytes": "2e"
+                        },
+                        {
+                            "list": [
+                                {
+                                    "constructor": 1,
+                                    "fields": [
+                                        {
+                                            "bytes": "2e63617264616e6f"
+                                        },
+                                        {
+                                            "constructor": 1,
+                                            "fields": []
+                                        },
+                                        {
+                                            "bytes": "3137322e32382e302e32"
+                                        },
+                                        {
+                                            "bytes": "41"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "constructor": 1,
+                                    "fields": [
+                                        {
+                                            "bytes": "2e63617264616e6f"
+                                        },
+                                        {
+                                            "constructor": 1,
+                                            "fields": []
+                                        },
+                                        {
+                                            "bytes": "6e312e63617264616e6f2e"
+                                        },
+                                        {
+                                            "bytes": "6e73"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "constructor": 1,
+                            "fields": []
+                        }
+                    ]
+                }
+            },
+            "reference_script": null,
+            "txout_cbor": null
+        },
+        {
+            "tx_hash": "6446524a703e86f3e58f25c4a8bdf8f7c243dd486081607d7bd58167889044d0",
+            "index": 1,
+            "slot": 50849992,
+            "assets": [
+                {
+                    "unit": "lovelace",
+                    "amount": 84036005
                 }
             ],
             "address": "addr_test1vr75xezmpxastymx985l3gamuxrwqdwcfrcnjlygs55aynsqu3edq",
@@ -619,9 +694,9 @@
         }
     ],
     "last_updated": {
-        "timestamp": "2024-01-29 12:22:31",
-        "block_hash": "9f392bf05b26c88bcd6934d9be66d8f17d4e0d70472fa6b1b8ed4a48db730cb2",
-        "block_slot": 50847751
+        "timestamp": "2024-02-01 17:54:24",
+        "block_hash": "6e2cde8e7daafa13a0e274ccaa1a84316e7681ef62eb003b74e7c8f4a2a6a1e5",
+        "block_slot": 51126864
     },
     "next_cursor": null
 }

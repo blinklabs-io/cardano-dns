@@ -43,12 +43,12 @@ curl -X POST \
 See [Example response](example.json)
 
 ## When Testing, Look For:
-1. Correct PolicyID + Correct Token Name + Correct Datum: `treehouse.cardano`, `dolphin.cardano`
-2. Ok Datum, but no Asset: `ghost.cardano`
-3. Correct Datum, but wrong Asset Policy Id: `dolphin.cardano`, `whale.cardano`
-4. Correct PolicyID + Correct Token Name, but trying to use wrong TLD: `orca.ergo`
+1. Correct PolicyID + Correct Token Name + Correct Datum: `village.cardano`
+2. Correct PolicyID + Correct Token Name + Correct Datum, with first `a` and `ns` records mapping to bad IP address: `enclave.cardano`
+3. Ok Datum, but no Asset: `town.cardano`
+4. Correct Datum, but wrong Asset Policy Id: `city.cardano`
 
-> See [/docs/write-datums-examples.md](/docs/write-datums-examples.md)
+> Full list: [/docs/write-datums-examples.md](/docs/write-datums-examples.md)
 
 ## We think this case is not possible:
 - Good Datum, correct PolicyID, but mismatched Token Name -- validators prevent this case -- Adrian is checking for loopholes

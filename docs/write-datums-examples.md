@@ -1,5 +1,28 @@
 # Example Usage `write_datums`:
 
+## Updated Examples - 2024-02-01
+
+### `village.cardano` - All Correct
+```bash
+cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "village" "village.cardano,3600,A,172.28.0.2;village.cardano,28800,ns,ns1.village.cardano;" ""
+```
+### `city.cardano` - Good Datum, Wrong PolicyID
+```bash
+cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "city" "city.cardano,3600,A,172.28.0.2;city.cardano,28800,ns,ns1.city.cardano;" ""
+```
+
+### `town.cardano` - Good Datum, No Asset
+```bash
+cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "town" "town.cardano,3600,A,172.28.0.2;town.cardano,28800,ns,ns1.town.cardano;" ""
+```
+
+### `enclave.cardano` - All Correct, but first DNS Record is a bad IP address
+```bash
+cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "enclave" "enclave.cardano,3600,A,401.401.401.401;enclave.cardano,28800,ns,ns1.enclave.cardano;enclave.cardano,3600,A,172.28.0.2;enclave.cardano,,ns,ns2.enclave.cardano;" ""
+```
+
+## Wrong Examples - `rtype` and `rdata` in wrong order:
+
 ### `treehouse.cardano`
 ```bash
 cabal run write_datums . "DNSReference" "DNSReferenceDatum" "1" "treehouse" "treehouse.cardano,3600,A,192.168.1.1;treehouse.cardano,,ns,ns1.treehouse.cardano;treehouse.cardano,28800,CNAME,treehouse.cardano" ""
